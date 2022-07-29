@@ -1,0 +1,6 @@
+
+
+# ignore all .txt files
+*.txt
+*.h5
+*data-00000-of-00001
