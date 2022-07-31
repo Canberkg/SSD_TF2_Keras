@@ -128,6 +128,8 @@ def ssd_training_300(root_dir_train,root_dir_valid,_root_dir_train_jsons,root_di
         mean_val=validation_loss.result()
         pb_i.update(current=train_generator.num_images(),values=[('training loss', training_loss.result()),('validation loss',mean_val)],finalize=True)
 
+        if (epoch + 1) % 10 == 0:
+            ssd_model.save_weights(filepath=os.path.join(SAVE_DIR,"{}.h5".format(MODEL_NAME)),overwrite=True, save_format='h5', options=None)
 
         training_loss.reset_states()
         validation_loss.reset_states()
