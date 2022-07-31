@@ -31,20 +31,20 @@ class SSD300(tf.keras.Model):
         self.backbone = load_mdl(inputs=tf.keras.Input(shape=(300,300,3),batch_size=BATCH_SIZE),num_class=self.NUM_CLASSES,model_type='VGG16')
         self.l2_normalize = Normalize(scale=20,name='conv4_3_norm')
 
-        self.Conv6_1 = tf.keras.layers.Conv2D(filters=1024,kernel_size=(3,3),strides=(1,1),dilation_rate=(6,6),padding="same",name="Conv6_1")
-        self.Conv7_1 = tf.keras.layers.Conv2D(filters=1024,kernel_size=(1,1),strides=(1,1),dilation_rate=(1,1),padding="same",name="Conv7_1")
+        self.Conv6_1 = tf.keras.layers.Conv2D(filters=1024,kernel_size=(3,3),strides=(1,1),dilation_rate=(6,6),padding="same",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv6_1")
+        self.Conv7_1 = tf.keras.layers.Conv2D(filters=1024,kernel_size=(1,1),strides=(1,1),dilation_rate=(1,1),padding="same",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv7_1")
 
-        self.Conv8_1 = tf.keras.layers.Conv2D(filters=256,kernel_size=(1,1),strides=(1,1),padding="valid",name="Conv8_1")
-        self.Conv8_2 = tf.keras.layers.Conv2D(filters=512,kernel_size=(3,3),strides=(2,2),padding="same",name="Conv8_2")
+        self.Conv8_1 = tf.keras.layers.Conv2D(filters=256,kernel_size=(1,1),strides=(1,1),padding="valid",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv8_1")
+        self.Conv8_2 = tf.keras.layers.Conv2D(filters=512,kernel_size=(3,3),strides=(2,2),padding="same",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv8_2")
 
-        self.Conv9_1 = tf.keras.layers.Conv2D(filters=128, kernel_size=(1, 1), strides=(1, 1), padding="valid",name="Conv9_1")
-        self.Conv9_2 = tf.keras.layers.Conv2D(filters=256, kernel_size=(3, 3), strides=(2, 2), padding="same",name="Conv9_2")
+        self.Conv9_1 = tf.keras.layers.Conv2D(filters=128, kernel_size=(1, 1), strides=(1, 1), padding="valid",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv9_1")
+        self.Conv9_2 = tf.keras.layers.Conv2D(filters=256, kernel_size=(3, 3), strides=(2, 2), padding="same",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv9_2")
 
-        self.Conv10_1 = tf.keras.layers.Conv2D(filters=128, kernel_size=(1, 1), strides=(1, 1), padding="valid",name="Conv10_1")
-        self.Conv10_2 = tf.keras.layers.Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding="valid",name="Conv10_2")
+        self.Conv10_1 = tf.keras.layers.Conv2D(filters=128, kernel_size=(1, 1), strides=(1, 1), padding="valid",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv10_1")
+        self.Conv10_2 = tf.keras.layers.Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding="valid",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv10_2")
 
-        self.Conv11_1 = tf.keras.layers.Conv2D(filters=128, kernel_size=(1, 1), strides=(1, 1), padding="valid",name="Conv11_1")
-        self.Conv11_2 = tf.keras.layers.Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding="valid",name="Conv11_2")
+        self.Conv11_1 = tf.keras.layers.Conv2D(filters=128, kernel_size=(1, 1), strides=(1, 1), padding="valid",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv11_1")
+        self.Conv11_2 = tf.keras.layers.Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding="valid",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name="Conv11_2")
 
         self.classifier_1=self.classifier(NUM_BOXES=self.get_NUM_BOXES(idx=0),name='classifier_1')
         self.classifier_2 = self.classifier(NUM_BOXES=self.get_NUM_BOXES(idx=1),name='classifier_2')
@@ -55,7 +55,7 @@ class SSD300(tf.keras.Model):
 
     def classifier(self,NUM_BOXES,name):
         filter_size= NUM_BOXES*(self.NUM_CLASSES+4)
-        classifier=tf.keras.layers.Conv2D(filters=filter_size,kernel_size=(3,3),strides=(1,1),padding="same",name=name)
+        classifier=tf.keras.layers.Conv2D(filters=filter_size,kernel_size=(3,3),strides=(1,1),padding="same",kernel_regularizer=tf.keras.regularizers.l2(l=0.01),name=name)
         return classifier
 
     def get_NUM_BOXES(self,idx):

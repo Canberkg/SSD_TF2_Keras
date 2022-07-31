@@ -86,12 +86,13 @@ def ssd_training_300(root_dir_train,root_dir_valid,_root_dir_train_jsons,root_di
                                         IMG_HEIGHT=IMG_HEIGHT,IOU_THRESHOLD=IOU_THRESHOLD,ASPECT_RATIOS=ASPECT_RATIOS,
                                         MIN_SCALE=MIN_SCALE,MAX_SCALE=MAX_SCALE)
             gt_offsets, anchor_state = labeled_boxes.get_offset_boxes()
-            total_loss, loc_loss, conf_loss = SSDLoss(y_true=gt_offsets, y_pred=ssd_pred,anchor_state=anchor_state,
+            batch_loss, loc_loss, conf_loss = SSDLoss(y_true=gt_offsets, y_pred=ssd_pred,anchor_state=anchor_state,
                                                       NUM_CLASSES=NUM_CLASSES)
-
+            reg_loss=tf.math.reduce_sum(ssd_model.losses)
+            total_loss=batch_loss+reg_loss
         grads = tape.gradient(total_loss, ssd_model.trainable_weights)
         optimizer.apply_gradients(zip(grads, ssd_model.trainable_weights))
-        return total_loss
+        return batch_loss
 
 
     def test_step(Image_Batch,GT_boxes):
