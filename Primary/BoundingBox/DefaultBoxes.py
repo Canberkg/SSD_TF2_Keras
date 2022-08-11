@@ -3,10 +3,9 @@ import numpy as np
 import math
 
 class Feature_Map(object):
-    def __init__(self,Feature_Maps,IMG_WIDTH,IMG_HEIGHT,MIN_SCALE,MAX_SCALE):
+    def __init__(self,Feature_Maps,IMG_WIDTH,IMG_HEIGHT,SIZES):
         self.NUM_Feature_Maps=len(Feature_Maps)
-        self.min_scale=MIN_SCALE
-        self.max_scale=MAX_SCALE
+        self.SIZES=SIZES
         self.Feature_Maps=Feature_Maps
         self.IMG_WIDTH=IMG_WIDTH
         self.IMG_HEIGHT = IMG_HEIGHT
@@ -23,17 +22,19 @@ class Feature_Map(object):
         if width_ratio !=height_ratio:
             raise ValueError("Downsampling ratio of width and height should be equal!")
         else:
-            return width_ratio
-    def get_scale(self,idx):
-        return self.min_scale+(((self.max_scale-self.min_scale)*idx)/(self.get_length()-1))
+            return math.ceil(width_ratio)
+    def get_scale_min(self,idx):
+        return self.SIZES[idx,0]
+    def get_scale_max(self,idx):
+        return self.SIZES[idx,1]
 
 class DefaultBoxes(object):
-    def __init__(self,Feature_Maps,IMG_WIDTH,IMG_HEIGHT,ASPECT_RATIOS,MIN_SCALE,MAX_SCALE):
+    def __init__(self,Feature_Maps,IMG_WIDTH,IMG_HEIGHT,ASPECT_RATIOS,SIZES):
         self.image_width=IMG_WIDTH
         self.image_height=IMG_HEIGHT
         self.aspect_ratios=ASPECT_RATIOS
         self.feature_maps=Feature_Map(Feature_Maps,IMG_WIDTH=IMG_WIDTH,IMG_HEIGHT=IMG_HEIGHT,
-                                      MIN_SCALE=MIN_SCALE,MAX_SCALE=MAX_SCALE)
+                                      SIZES=SIZES)
         self.Num_Feature_Maps=self.feature_maps.get_length()
         self.Offset=0.5
 
@@ -41,8 +42,8 @@ class DefaultBoxes(object):
         #Properties
         Fm_width=self.feature_maps.get_width(idx)
         Fm_height=self.feature_maps.get_height(idx)
-        s_idx=self.feature_maps.get_scale(idx)*self.feature_maps.get_downsample_ratio(idx)
-        s_idx_plus=self.feature_maps.get_scale((idx+1)%self.Num_Feature_Maps)*self.feature_maps.get_downsample_ratio((idx+1)%self.Num_Feature_Maps)
+        s_idx=self.feature_maps.get_scale_min(idx=idx)
+        s_idx_plus=self.feature_maps.get_scale_max(idx=idx)
         aspect_ratios=self.aspect_ratios[idx]
 
         step_x=self.image_width/Fm_width

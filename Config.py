@@ -1,7 +1,7 @@
 from Primary.DataPrep.class_dict import class_dict
 cfg_300 = {
     ## Training Settings
-    'BATCH_SIZE' :  4,
+    'BATCH_SIZE' :  1,
     'EPOCH'      :  5,
     'IMG_WIDTH'  :  300,
     'IMG_HEIGHT' :  300,
@@ -13,20 +13,19 @@ cfg_300 = {
     'NUM_CLASS'  : len(class_dict.keys()),
 
     ## Anchor Box Settings
-    'ASPECT_RATIOS'  : [[1.0, 2.0, 0.5],
-                       [1.0, 2.0, 0.5, 3.0, 1.0/3.0],
-                       [1.0, 2.0, 0.5, 3.0, 1.0/3.0],
-                       [1.0, 2.0, 0.5, 3.0, 1.0/3.0],
-                       [1.0, 2.0, 0.5],
-                       [1.0, 2.0, 0.5]],
-    'MIN_SCALE'     : 0.2,
-    'MAX_SCALE'     : 0.9,
+    'ASPECT_RATIOS' : [[1.0, 2.0, 0.5],
+                      [1.0, 2.0, 0.5, 3.0, 1.0/3.0],
+                      [1.0, 2.0, 0.5, 3.0, 1.0/3.0],
+                      [1.0, 2.0, 0.5, 3.0, 1.0/3.0],
+                      [1.0, 2.0, 0.5],
+                      [1.0, 2.0, 0.5]],
+    'SIZES'         : [(30,60),(60,111),(111,162),(162,213),(213,264),(264,315)],
     'IOU_THRESHOLD' : 0.5,
     'FEATURE_MAPS'  : [(38,38),(19,19),(10,10),(5,5),(3,3),(1,1)],
 
     ## Model Save and Checkpoint Settings
-    'SAVE_DIR'   : "D:\\PersonalResearch\\Projects\\SSD\\Saved_Model",
-    'MODEL_NAME' : 'Model_Test',
+    'SAVE_DIR'   : "D:\\PersonalResearch\\Projects\\Models\\SSD",
+    'MODEL_NAME' : 'Model_Test_1',
     'CKPT_DIR'   : 'ckpt_test',
 
     ## Dataset Settings

@@ -1,6 +1,10 @@
-
-
-# ignore all .txt files
+__pycache__
+checkpoints
+weights
+Dataset
 *.txt
 *.h5
-*data-00000-of-00001
+*.jpg
+*.json
+*.xml
+*.ckpt

@@ -12,15 +12,18 @@ tf.random.set_seed(1234)
 
 if __name__ == "__main__":
 
+    BATCH_SIZE = cfg_300['BATCH_SIZE']
+    ASPECT_RATIOS = cfg_300['ASPECT_RATIOS']
     IMG_WIDTH       = cfg_300['IMG_WIDTH']
     IMG_HEIGHT      = cfg_300['IMG_HEIGHT']
     NUM_CLASSES     = cfg_300['NUM_CLASS']
     FEATURE_MAPS    = cfg_300['FEATURE_MAPS']
+    SIZES           = cfg_300['SIZES']
     SAVE_DIR        = cfg_300['SAVE_DIR']
-    TEST_MODEL_NAME = "Model_Test"
-    TEST_IMG_PATH   = "D:\\PersonalResearch\\Projects\\SSD\\Dataset\\images\\road1.png"
+    TEST_MODEL_NAME = "Model_Test_1"
+    TEST_IMG_PATH   = "D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Img\\val\\2008_000780.jpg"
 
-    ssd_model = SSD300()
+    ssd_model = SSD300(ASPECT_RATIOS=ASPECT_RATIOS,BATCH_SIZE=BATCH_SIZE,NUM_CLASS=NUM_CLASSES)
     ssd_model.build(input_shape=(1,300,300,3))
     ssd_model.load_weights(os.path.join(SAVE_DIR,"{}.h5".format(TEST_MODEL_NAME)))
     ssd_model.trainable=False
@@ -36,7 +39,7 @@ if __name__ == "__main__":
     Img_normalized = tf.keras.applications.vgg16.preprocess_input(Img_arr)
     Images.append(Img_normalized)
     stacked_image=tf.stack(Images,axis=0)
-    inference_process = inference(model=ssd_model,NUM_CLASSES=NUM_CLASSES,IMG_HEIGHT=IMG_HEIGHT,IMG_WIDTH=IMG_WIDTH,FEATURE_MAPS=FEATURE_MAPS)
+    inference_process = inference(model=ssd_model,NUM_CLASSES=NUM_CLASSES,IMG_HEIGHT=IMG_HEIGHT,IMG_WIDTH=IMG_WIDTH,FEATURE_MAPS=FEATURE_MAPS,ASPECT_RATIOS=ASPECT_RATIOS,SIZES=SIZES)
     is_object_exist, boxes, scores,classes = inference_process.detected_boxes(image=stacked_image)
 
     if is_object_exist==False:

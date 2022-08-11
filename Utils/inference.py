@@ -5,12 +5,14 @@ from Primary.BoundingBox.DefaultBoxes import DefaultBoxes
 tf.random.set_seed(1234)
 
 class inference(object):
-    def __init__(self,model,NUM_CLASSES,IMG_HEIGHT,IMG_WIDTH,FEATURE_MAPS):
+    def __init__(self,model,NUM_CLASSES,IMG_HEIGHT,IMG_WIDTH,FEATURE_MAPS,ASPECT_RATIOS,SIZES):
         self.model=model
         self.IMG_HEIGHT=IMG_HEIGHT
         self.IMG_WIDTH=IMG_WIDTH
         self.NUM_CLASSES=NUM_CLASSES
         self.FEATURE_MAPS=FEATURE_MAPS
+        self.ASPECT_RATIOS=ASPECT_RATIOS
+        self.SIZES=SIZES
 
     def ssd_prediction(self,image):
         ssd_pred=self.model(image)
@@ -31,7 +33,7 @@ class inference(object):
     def decode_offsets_to_true_boxes(self,feature_maps,offset_pred):
         pred_classes = tf.reshape(tensor=offset_pred[..., :self.NUM_CLASSES], shape=(-1, self.NUM_CLASSES))
         pred_boxes= tf.reshape(tensor=offset_pred[..., self.NUM_CLASSES:], shape=(-1, 4))
-        default_boxes=DefaultBoxes(Feature_Maps=feature_maps).generate_default_boxes()
+        default_boxes=DefaultBoxes(Feature_Maps=self.FEATURE_MAPS,IMG_WIDTH=self.IMG_WIDTH,IMG_HEIGHT=self.IMG_HEIGHT,ASPECT_RATIOS=self.ASPECT_RATIOS,SIZES=self.SIZES).generate_default_boxes()
 
 
         true_x_c=(pred_boxes[...,0]*default_boxes[...,2]*0.1)+default_boxes[...,0]

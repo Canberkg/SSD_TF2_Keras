@@ -26,8 +26,7 @@ def ssd_training_300(root_dir_train,root_dir_valid,_root_dir_train_jsons,root_di
     DECAY_RATE    = cfg_300['DECAY_RATE']
     OPTIMIZER     = cfg_300['OPTIMIZER']
     ASPECT_RATIOS = cfg_300['ASPECT_RATIOS']
-    MIN_SCALE     = cfg_300['MIN_SCALE']
-    MAX_SCALE     = cfg_300['MAX_SCALE']
+    SIZES         = cfg_300['SIZES']
     IOU_THRESHOLD = cfg_300['IOU_THRESHOLD']
     FEATURE_MAPS  = cfg_300['FEATURE_MAPS']
     SHUFFLE       = cfg_300['SHUFFLE']
@@ -83,8 +82,8 @@ def ssd_training_300(root_dir_train,root_dir_valid,_root_dir_train_jsons,root_di
         with tf.GradientTape() as tape:
             ssd_pred = ssd_model(Image_Batch, training=True)
             labeled_boxes = GroundTruth(Boxes=GT_boxes, FEATURE_MAPS=FEATURE_MAPS,IMG_WIDTH=IMG_WIDTH,
-                                        IMG_HEIGHT=IMG_HEIGHT,IOU_THRESHOLD=IOU_THRESHOLD,ASPECT_RATIOS=ASPECT_RATIOS,
-                                        MIN_SCALE=MIN_SCALE,MAX_SCALE=MAX_SCALE)
+                                        IMG_HEIGHT=IMG_HEIGHT,IOU_THRESHOLD=IOU_THRESHOLD,
+                                        ASPECT_RATIOS=ASPECT_RATIOS,SIZES=SIZES)
             gt_offsets, anchor_state = labeled_boxes.get_offset_boxes()
             batch_loss, loc_loss, conf_loss = SSDLoss(y_true=gt_offsets, y_pred=ssd_pred,anchor_state=anchor_state,
                                                       NUM_CLASSES=NUM_CLASSES)
@@ -98,8 +97,8 @@ def ssd_training_300(root_dir_train,root_dir_valid,_root_dir_train_jsons,root_di
     def test_step(Image_Batch,GT_boxes):
         ssd_pred = ssd_model(Image_Batch, training=False)
         labeled_boxes = GroundTruth(Boxes=GT_boxes, FEATURE_MAPS=FEATURE_MAPS, IMG_WIDTH=IMG_WIDTH,
-                                    IMG_HEIGHT=IMG_HEIGHT, IOU_THRESHOLD=IOU_THRESHOLD, ASPECT_RATIOS=ASPECT_RATIOS,
-                                    MIN_SCALE=MIN_SCALE, MAX_SCALE=MAX_SCALE)
+                                    IMG_HEIGHT=IMG_HEIGHT, IOU_THRESHOLD=IOU_THRESHOLD,
+                                    ASPECT_RATIOS=ASPECT_RATIOS,SIZES=SIZES)
         gt_offsets, anchor_state = labeled_boxes.get_offset_boxes()
         total_loss, loc_loss, conf_loss = SSDLoss(y_true=gt_offsets, y_pred=ssd_pred, anchor_state=anchor_state,
                                                   NUM_CLASSES=NUM_CLASSES)
