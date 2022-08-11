@@ -1,8 +1,8 @@
 from Primary.DataPrep.class_dict import class_dict
 cfg_300 = {
     ## Training Settings
-    'BATCH_SIZE' :  1,
-    'EPOCH'      :  5,
+    'BATCH_SIZE' :  16,
+    'EPOCH'      :  50,
     'IMG_WIDTH'  :  300,
     'IMG_HEIGHT' :  300,
     'OPTIMIZER'  :  'ADAM', # Can be set as ADAM or SGD
@@ -28,15 +28,15 @@ cfg_300 = {
     'FEATURE_MAPS'  : [(38,38),(19,19),(10,10),(5,5),(3,3),(1,1)],
 
     ## Model Save and Checkpoint Settings
-    'SAVE_DIR'   : "D:\\PersonalResearch\\Projects\\Models\\SSD",
-    'MODEL_NAME' : 'Model_Test_1',
-    'CKPT_DIR'   : 'ckpt_test',
+    'SAVE_DIR'   : "Saved_Model",
+    'MODEL_NAME' : 'Name of the Model',
+    'CKPT_DIR'   : 'Name of the Checkpoint Directory',
 
     ## Dataset Settings
-    'TRAIN_IMG'   : "D:\\PersonalResearch\\Projects\\SSD\\Dataset\\images\\train",
-    'VALID_IMG'   : "D:\\PersonalResearch\\Projects\\SSD\\Dataset\\images\\valid",
-    "TRAIN_LABEL" : "D:\\PersonalResearch\\Projects\SSD\\Dataset\\annotations_json\\train",
-    "VALID_LABEL" : "D:\\PersonalResearch\\Projects\SSD\\Dataset\\annotations_json\\valid",
+    'TRAIN_IMG'   : "Dataset/images/train",
+    'VALID_IMG'   : "Dataset/images/valid",
+    "TRAIN_LABEL" : "Dataset/annotations_json/train",
+    "VALID_LABEL" : "Dataset/annotations_json/valid",
     'SHUFFLE' : True,
 
     ## Dataset Prepearation

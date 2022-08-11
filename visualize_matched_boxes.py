@@ -42,12 +42,12 @@ if __name__=="__main__":
     SIZES         = cfg_300['SIZES']
     IOU_THRESHOLD = cfg_300['IOU_THRESHOLD']
     FEATURE_MAPS  = cfg_300['FEATURE_MAPS']
-
+    TEST_IMG      = "2008_000202.jpg"
 
     root_dir_real_train = IMG_PATH
     root_dir_Jsons = LABEL_PATH
     json_list=os.listdir(root_dir_Jsons)
-    label_arr = ("road13.png").split('.')[0]
+    label_arr = (TEST_IMG).split('.')[0]
     label = '{}.json'.format(label_arr)
     json_id=json_list.index(label)
     f = open(os.path.join(root_dir_Jsons, json_list[json_id]))
@@ -55,7 +55,7 @@ if __name__=="__main__":
     voc = VOC(json_data=data, IMG_WIDTH=300, IMG_HEIGHT=300)
     gt_boxes = voc.obj_to_gt()
 
-    img = "road13.png"
+    img = TEST_IMG
     print(img)
     Img_List = []
     GT_List = []
@@ -75,7 +75,6 @@ if __name__=="__main__":
     numpy_mb[..., 3] = numpy_mb[..., 3] * 300
     image = cv2.imread(filename=os.path.join(root_dir_real_train, img))
     image = cv2.resize(image, dsize=(300, 300))
-    # image=cv2.resize(image,dsize=(300,300))
     image = Visualize_BB(image,numpy_mb, scores=scores_db,color=(255, 0, 0))
     scores_gt=tf.zeros_like(gt_boxes)
     numpy_gt=gt_boxes.numpy()

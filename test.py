@@ -20,8 +20,8 @@ if __name__ == "__main__":
     FEATURE_MAPS    = cfg_300['FEATURE_MAPS']
     SIZES           = cfg_300['SIZES']
     SAVE_DIR        = cfg_300['SAVE_DIR']
-    TEST_MODEL_NAME = "Model_Test_1"
-    TEST_IMG_PATH   = "D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Img\\val\\2008_000780.jpg"
+    TEST_MODEL_NAME = cfg_300['TEST_MODEL_NAME']
+    TEST_IMG_PATH   = cfg_300["TEST_IMAGE"]
 
     ssd_model = SSD300(ASPECT_RATIOS=ASPECT_RATIOS,BATCH_SIZE=BATCH_SIZE,NUM_CLASS=NUM_CLASSES)
     ssd_model.build(input_shape=(1,300,300,3))
