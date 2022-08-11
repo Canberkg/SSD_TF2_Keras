@@ -1,17 +1,14 @@
-import os
-import json
+
 import tensorflow as tf
-import numpy as np
-from cv2 import cv2
 from Primary.BoundingBox.DefaultBoxes import DefaultBoxes
-from Utils.utils import Resize_Boxes,calculate_iou,Visualize_BB
-from Utils.utils import Visualize_BB
+from Utils.utils import calculate_iou
 
 class GroundTruth(object):
-    def __init__(self,Boxes,FEATURE_MAPS,IMG_WIDTH,IMG_HEIGHT,IOU_THRESHOLD,ASPECT_RATIOS,MIN_SCALE,MAX_SCALE):
+    def __init__(self,Boxes,FEATURE_MAPS,IMG_WIDTH,IMG_HEIGHT,IOU_THRESHOLD,ASPECT_RATIOS,SIZES):
         self.B_Boxes=Boxes
-        self.default_boxes=DefaultBoxes(Feature_Maps=FEATURE_MAPS,IMG_WIDTH=IMG_WIDTH,IMG_HEIGHT=IMG_HEIGHT,ASPECT_RATIOS=ASPECT_RATIOS,MIN_SCALE=MIN_SCALE,MAX_SCALE=MAX_SCALE)
+        self.default_boxes=DefaultBoxes(Feature_Maps=FEATURE_MAPS,IMG_WIDTH=IMG_WIDTH,IMG_HEIGHT=IMG_HEIGHT,ASPECT_RATIOS=ASPECT_RATIOS,SIZES=SIZES)
         self.predicted_boxes=self.default_boxes.generate_default_boxes()
+        self.IOU_THRESHOLD=IOU_THRESHOLD
 
     def positive_negative_iou_metric(self,GT_boxes,Anchor_Boxes):
 
@@ -22,11 +19,9 @@ class GroundTruth(object):
         max_iou_indexes = tf.cast(max_iou_indexes, dtype=tf.dtypes.int32)
         max_iou_indexes = tf.expand_dims(max_iou_indexes, axis=-1)
 
-        positive_negative_boxes = tf.where(max_iou_values>= 0.5, 1, -1)
+        positive_negative_boxes = tf.where(max_iou_values>= self.IOU_THRESHOLD, 1, -1)
         anchor_state=tf.where(max_iou_values<0.4, 0, positive_negative_boxes)
-        pos_boxes=tf.where(positive_negative_boxes==1,1,0)
-        if tf.math.reduce_sum(pos_boxes) == 0:
-            anchor_state = tf.where(max_iou_values == tf.math.reduce_max(max_iou_values), 1, 0)
+
         anchor_state = tf.cast(anchor_state, dtype=tf.dtypes.int32)
 
         return anchor_state,max_iou_indexes

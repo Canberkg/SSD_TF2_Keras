@@ -1,6 +1,7 @@
 import os
 import shutil
 from cv2 import cv2
+from Config import cfg_300
 
 def Copy_and_Save (set_path,img_path,annotation_path,new_img_path,new_annotation_path):
     with open(set_path) as f:
@@ -13,14 +14,23 @@ def Copy_and_Save (set_path,img_path,annotation_path,new_img_path,new_annotation
 
 if __name__ == '__main__':
 
-    set_train_path="D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\ImageSets\\Main\\train.txt"
-    set_val_path = "D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\ImageSets\\Main\\val.txt"
-    img_path="D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\JPEGImages"
-    label_path = "D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Annotations_json"
-    train_img_split="D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Img\\train"
-    valid_img_split = "D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Img\\val"
-    train_label_split="D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Labels\\train"
-    valid_label_split = "D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Labels\\val"
+    IMG_PATH    = cfg_300['IMG_PATH']
+    LABEL_PATH  = cfg_300['JSON_ANNOTATION']
+    TRAIN_SPLIT = cfg_300['TRAIN_SPLIT']
+    VALID_SPLIT = cfg_300['VALID_SPLIT']
+    TRAIN_IMG   = cfg_300['TRAIN_IMG']
+    VALID_IMG   = cfg_300['VALID_IMG']
+    TRAIN_LABEL = cfg_300['TRAIN_LABEL']
+    VALID_LABEL = cfg_300['VALID_LABEL']
 
-    #Copy_and_Save(set_path=set_train_path,img_path=img_path,annotation_path=label_path,new_img_path=train_img_split,new_annotation_path=train_label_split)
-    Copy_and_Save(set_path=set_val_path, img_path=img_path, annotation_path=label_path, new_img_path=valid_img_split, new_annotation_path=valid_label_split)
+    set_train_split = TRAIN_SPLIT
+    set_val_split   = VALID_SPLIT
+    img_path        = IMG_PATH
+    label_path      = LABEL_PATH
+    train_img       = TRAIN_IMG
+    valid_img       = VALID_IMG
+    train_label     = TRAIN_LABEL
+    valid_label     = VALID_LABEL
+
+    Copy_and_Save(set_path=set_train_split,img_path=img_path,annotation_path=label_path,new_img_path=train_img,new_annotation_path=train_label)
+    Copy_and_Save(set_path=set_val_split, img_path=img_path, annotation_path=label_path, new_img_path=valid_img, new_annotation_path=valid_label)
