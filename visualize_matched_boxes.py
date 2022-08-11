@@ -5,7 +5,7 @@ import tensorflow as tf
 from cv2 import cv2
 from Utils.utils import Visualize_BB
 from Primary.DataPrep.VOC import VOC
-from Config import cfg_300
+from Config import FEATURE_MAPS
 
 from Primary.BoundingBox.GroundTruth import GroundTruth
 def total_matched():
@@ -35,36 +35,24 @@ def total_matched():
 if __name__=="__main__":
     #total=total_matched()
     #print(total)
-
-
-    IMG_WIDTH     = cfg_300['IMG_WIDTH']
-    IMG_HEIGHT    = cfg_300['IMG_HEIGHT']
-    ASPECT_RATIOS = cfg_300['ASPECT_RATIOS']
-    SIZES         = cfg_300['SIZES']
-    IOU_THRESHOLD = cfg_300['IOU_THRESHOLD']
-    FEATURE_MAPS  = cfg_300['FEATURE_MAPS']
-
-
-    root_dir_real_train = cfg_300['TRAIN_IMG']
-    root_dir_Jsons = cfg_300['TRAIN_LABEL']
+    root_dir_real_train = "D:\\PersonalResearch\\Projects\\SSD\\Dataset\\images"
+    root_dir_Jsons = "D:\\PersonalResearch\\Projects\SSD\\Dataset\\annotations_json"
     json_list=os.listdir(root_dir_Jsons)
-    label_arr = ("2008_000217.jpg").split('.')[0]
+    label_arr = ("road13.png").split('.')[0]
     label = '{}.json'.format(label_arr)
     json_id=json_list.index(label)
     f = open(os.path.join(root_dir_Jsons, json_list[json_id]))
     data = json.load(f)
     voc = VOC(json_data=data, IMG_WIDTH=300, IMG_HEIGHT=300)
-    GT_boxes = voc.obj_to_gt()
+    gt_boxes = voc.obj_to_gt()
 
-    img = "2008_000217.jpg"
+    img = "road13.png"
     print(img)
     Img_List = []
     GT_List = []
 
 
-    gt=GroundTruth(Boxes=GT_boxes, FEATURE_MAPS=FEATURE_MAPS,IMG_WIDTH=IMG_WIDTH,
-                    IMG_HEIGHT=IMG_HEIGHT,IOU_THRESHOLD=IOU_THRESHOLD,
-                    ASPECT_RATIOS=ASPECT_RATIOS,SIZES=SIZES)
+    gt=GroundTruth(Boxes=gt_boxes,FEATURE_MAPS=FEATURE_MAPS)
     offset,anchor_state=gt.get_positive_negative_boxes(GT_boxes=gt.B_Boxes,Pred_Boxes=gt.predicted_boxes)
     print(tf.math.reduce_sum(tf.where(tf.equal(anchor_state,1),1,0)))
     matched_boxes=tf.gather(params=gt.predicted_boxes,indices=tf.where(tf.equal(anchor_state,1))[:,0])
@@ -78,8 +66,8 @@ if __name__=="__main__":
     image = cv2.resize(image, dsize=(300, 300))
     # image=cv2.resize(image,dsize=(300,300))
     image = Visualize_BB(image,numpy_mb, scores=scores_db,color=(255, 0, 0))
-    scores_gt=tf.zeros_like(GT_boxes)
-    numpy_gt=GT_boxes.numpy()
+    scores_gt=tf.zeros_like(gt_boxes)
+    numpy_gt=gt_boxes.numpy()
     numpy_gt[..., 0] = numpy_gt[..., 0] * 300
     numpy_gt[..., 2] = numpy_gt[..., 2] * 300
     numpy_gt[..., 1] = numpy_gt[..., 1] * 300

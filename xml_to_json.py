@@ -1,10 +1,9 @@
 import os
 import json
 import xmltodict
-from Config import cfg_300
 
-xml_filepath    =   cfg_300["XML_FILEPATH"]
-json_filepath   =   cfg_300["JSON_FILEPATH"]
+xml_filepath="D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Annotations"
+json_filepath="D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Annotations_json"
 
 xml_list=os.listdir(xml_filepath)
 for i in range(len(xml_list)):
