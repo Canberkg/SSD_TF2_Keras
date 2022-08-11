@@ -4,7 +4,7 @@ import numpy as np
 
 
 
-def _smooth_l1(y_true, y_pred, anchor_state):
+def Smooth_L1(y_true, y_pred, anchor_state):
 
     sigma = 3.0
     sigma_squared = sigma ** 2
@@ -62,9 +62,9 @@ def SSDLoss(y_true, y_pred, anchor_state,NUM_CLASSES):
     y_true_cord = y_true[:, :, :4]
     y_pred_cord = y_pred[:, :, NUM_CLASSES:]
 
-    loc_loss = _smooth_l1(y_true=y_true_cord, y_pred=y_pred_cord, anchor_state=anchor_state)
+    loc_loss = Smooth_L1(y_true=y_true_cord, y_pred=y_pred_cord, anchor_state=anchor_state)
     conf_loss = ConfidenceLoss(y_true=y_true, y_pred=y_pred,NUM_CLASSES=NUM_CLASSES)
 
     loss = loc_loss + conf_loss
-    # print(f"conf_loss : {conf_loss} , loc_loss : {loc_loss}")
+
     return loss, loc_loss, conf_loss

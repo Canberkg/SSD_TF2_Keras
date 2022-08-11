@@ -12,6 +12,10 @@ cfg_300 = {
         'DECAY_RATE'  : 0.96,
     'NUM_CLASS'  : len(class_dict.keys()),
 
+    ## Test Settings
+    'TEST_MODEL_NAME' : "Name of the model to be used for testing",
+    'TEST_IMAGE'      : "Path of the image to be used for testing",
+
     ## Anchor Box Settings
     'ASPECT_RATIOS' : [[1.0, 2.0, 0.5],
                       [1.0, 2.0, 0.5, 3.0, 1.0/3.0],
@@ -24,15 +28,21 @@ cfg_300 = {
     'FEATURE_MAPS'  : [(38,38),(19,19),(10,10),(5,5),(3,3),(1,1)],
 
     ## Model Save and Checkpoint Settings
-    'SAVE_DIR'   : "D:\\PersonalResearch\\Projects\\Models\\SSD",
-    'MODEL_NAME' : 'Model_Test_1',
-    'CKPT_DIR'   : 'ckpt_test',
+    'SAVE_DIR'    : "Saved_Model",
+    'MODEL_NAME'  : 'Model_Test_1',
+    'CKPT_DIR'    : 'ckpt_test',
 
     ## Dataset Settings
-    'TRAIN_IMG'   : "D:\\PersonalResearch\\Projects\\SSD\\Dataset\\images\\train",
-    'VALID_IMG'   : "D:\\PersonalResearch\\Projects\\SSD\\Dataset\\images\\valid",
-    "TRAIN_LABEL" : "D:\\PersonalResearch\\Projects\SSD\\Dataset\\annotations_json\\train",
-    "VALID_LABEL" : "D:\\PersonalResearch\\Projects\SSD\\Dataset\\annotations_json\\valid",
-    'SHUFFLE' : True
+    'TRAIN_IMG'    : "Dataset/images/train",
+    'VALID_IMG'    : "Dataset/images/valid",
+    "TRAIN_LABEL"  : "Dataset/annotations_json/train",
+    "VALID_LABEL"  : "Dataset/annotations_json/valid",
+    'SHUFFLE'      : True,
 
+    ##Dataset Preperation
+    "IMG_FILEPATH"  : "Directory of Images",
+    "XML_FILEPATH"  : "Dırectory of XML annotations",
+    "JSON_FILEPATH" : "Dırectory of JSON annotations",
+    "TRAIN_SPLIT"   : "Directory of a txt file which contains the names of training data",
+    "VALID_SPLIT"   : "Directory of a txt file which contains the names of validation data"
 }

@@ -24,9 +24,9 @@ class Feature_Map(object):
         else:
             return math.ceil(width_ratio)
     def get_scale_min(self,idx):
-        return self.SIZES[idx,0]
+        return self.SIZES[idx][0]
     def get_scale_max(self,idx):
-        return self.SIZES[idx,1]
+        return self.SIZES[idx][1]
 
 class DefaultBoxes(object):
     def __init__(self,Feature_Maps,IMG_WIDTH,IMG_HEIGHT,ASPECT_RATIOS,SIZES):

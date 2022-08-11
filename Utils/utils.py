@@ -1,4 +1,4 @@
-from cv2 import cv2
+import cv2
 import tensorflow as tf
 from matplotlib import pyplot
 from Config import cfg_300
