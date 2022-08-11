@@ -1,11 +1,7 @@
-import os
-import json
+
 import tensorflow as tf
-import numpy as np
-from cv2 import cv2
 from Primary.BoundingBox.DefaultBoxes import DefaultBoxes
-from Utils.utils import Resize_Boxes,calculate_iou,Visualize_BB
-from Utils.utils import Visualize_BB
+from Utils.utils import calculate_iou
 
 class GroundTruth(object):
     def __init__(self,Boxes,FEATURE_MAPS,IMG_WIDTH,IMG_HEIGHT,IOU_THRESHOLD,ASPECT_RATIOS,SIZES):

@@ -13,7 +13,8 @@ cfg_300 = {
     'NUM_CLASS'  : len(class_dict.keys()),
 
     ## Test Settings
-
+    "TEST_MODEL_NAME" : "The name of the model to be used for testing",
+    "TEST_IMAGE"      : "Path of the image to be used for testing",
 
     ## Anchor Box Settings
     'ASPECT_RATIOS' : [[1.0, 2.0, 0.5],
@@ -36,6 +37,13 @@ cfg_300 = {
     'VALID_IMG'   : "D:\\PersonalResearch\\Projects\\SSD\\Dataset\\images\\valid",
     "TRAIN_LABEL" : "D:\\PersonalResearch\\Projects\SSD\\Dataset\\annotations_json\\train",
     "VALID_LABEL" : "D:\\PersonalResearch\\Projects\SSD\\Dataset\\annotations_json\\valid",
-    'SHUFFLE' : True
+    'SHUFFLE' : True,
+
+    ## Dataset Prepearation
+    'IMG_PATH'       : "Directory Path of Images",
+    'XML_ANNOTATION' : "Directory Path of XML Annotations",
+    'JSON_ANNOTATION': "Directory Path of JSON Annotations",
+    'TRAIN_SPLIT'    : "Directory Path of training set txt file which contains the name of the all the image names belong to training",
+    'VALID_SPLIT'    : "Directory Path of training set txt file which contains the name of the all the image names belong to validation",
 
 }

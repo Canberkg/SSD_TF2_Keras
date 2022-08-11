@@ -5,7 +5,7 @@ import tensorflow as tf
 from cv2 import cv2
 from Utils.utils import Visualize_BB
 from Primary.DataPrep.VOC import VOC
-from Config import FEATURE_MAPS
+from Config import cfg_300
 
 from Primary.BoundingBox.GroundTruth import GroundTruth
 def total_matched():
@@ -33,10 +33,19 @@ def total_matched():
 
         return total_pos
 if __name__=="__main__":
-    #total=total_matched()
-    #print(total)
-    root_dir_real_train = "D:\\PersonalResearch\\Projects\\SSD\\Dataset\\images"
-    root_dir_Jsons = "D:\\PersonalResearch\\Projects\SSD\\Dataset\\annotations_json"
+
+    IMG_PATH      = cfg_300['IMG_PATH']
+    LABEL_PATH    = cfg_300['JSON_ANNOTATION']
+    IMG_WIDTH     = cfg_300['IMG_WIDTH']
+    IMG_HEIGHT    = cfg_300['IMG_HEIGHT']
+    ASPECT_RATIOS = cfg_300['ASPECT_RATIOS']
+    SIZES         = cfg_300['SIZES']
+    IOU_THRESHOLD = cfg_300['IOU_THRESHOLD']
+    FEATURE_MAPS  = cfg_300['FEATURE_MAPS']
+
+
+    root_dir_real_train = IMG_PATH
+    root_dir_Jsons = LABEL_PATH
     json_list=os.listdir(root_dir_Jsons)
     label_arr = ("road13.png").split('.')[0]
     label = '{}.json'.format(label_arr)
@@ -52,7 +61,9 @@ if __name__=="__main__":
     GT_List = []
 
 
-    gt=GroundTruth(Boxes=gt_boxes,FEATURE_MAPS=FEATURE_MAPS)
+    gt=GroundTruth(Boxes=gt_boxes, FEATURE_MAPS=FEATURE_MAPS,IMG_WIDTH=IMG_WIDTH,
+                                        IMG_HEIGHT=IMG_HEIGHT,IOU_THRESHOLD=IOU_THRESHOLD,
+                                        ASPECT_RATIOS=ASPECT_RATIOS,SIZES=SIZES)
     offset,anchor_state=gt.get_positive_negative_boxes(GT_boxes=gt.B_Boxes,Pred_Boxes=gt.predicted_boxes)
     print(tf.math.reduce_sum(tf.where(tf.equal(anchor_state,1),1,0)))
     matched_boxes=tf.gather(params=gt.predicted_boxes,indices=tf.where(tf.equal(anchor_state,1))[:,0])
