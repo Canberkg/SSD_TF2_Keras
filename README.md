@@ -39,3 +39,4 @@ For testing, the name of the model used for testing and the path to the image mu
 
 ## Reference
 [1]LIU, Wei, et al. Ssd: Single shot multibox detector. In: European conference on computer vision. Springer, Cham, 2016. p. 21-37.
+https://github.com/bubbliiiing/ssd-tf2
