@@ -37,10 +37,10 @@ def ssd_training_300(root_dir_train,root_dir_valid,_root_dir_train_jsons,root_di
 
     train_generator = data_gen(Img_Path=root_dir_train,Label_Path=root_dir_train_jsons,
                                Img_Width=IMG_WIDTH,Img_Height=IMG_HEIGHT,Batch_Size=BATCH_SIZE,
-                               Num_Classes=NUM_CLASSES,Shuffle=SHUFFLE)
+                               Num_Classes=NUM_CLASSES,Shuffle=SHUFFLE,Augmentation="FLIP")
     valid_generator = data_gen(Img_Path=root_dir_valid, Label_Path=root_dir_valid_jsons,
                                Img_Width=IMG_WIDTH, Img_Height=IMG_HEIGHT, Batch_Size=BATCH_SIZE,
-                               Num_Classes=NUM_CLASSES, Shuffle=SHUFFLE)
+                               Num_Classes=NUM_CLASSES, Shuffle=False)
 
     ssd_model = SSD300(ASPECT_RATIOS=ASPECT_RATIOS,BATCH_SIZE=BATCH_SIZE,NUM_CLASS=NUM_CLASSES)
 

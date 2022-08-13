@@ -24,12 +24,13 @@ class Feature_Map(object):
         else:
             return math.ceil(width_ratio)
     def get_scale_min(self,idx):
-        return self.SIZES[idx,0]
+        return self.SIZES[idx][0]
     def get_scale_max(self,idx):
-        return self.SIZES[idx,1]
+        return self.SIZES[idx][1]
 
 class DefaultBoxes(object):
     def __init__(self,Feature_Maps,IMG_WIDTH,IMG_HEIGHT,ASPECT_RATIOS,SIZES):
+
         self.image_width=IMG_WIDTH
         self.image_height=IMG_HEIGHT
         self.aspect_ratios=ASPECT_RATIOS
@@ -39,7 +40,7 @@ class DefaultBoxes(object):
         self.Offset=0.5
 
     def create_default_boxes_for_feature_map(self,idx):
-        #Properties
+
         Fm_width=self.feature_maps.get_width(idx)
         Fm_height=self.feature_maps.get_height(idx)
         s_idx=self.feature_maps.get_scale_min(idx=idx)
@@ -87,7 +88,7 @@ class DefaultBoxes(object):
     def generate_default_boxes(self):
         DefaultBoxes_list=[]
         for i in range(self.Num_Feature_Maps):
-            #Calculate Cebter points and Width and Height of each deafult box for a specific feature map
+
             X_middle,Y_middle,Widht,Height= self.create_default_boxes_for_feature_map(idx=i)
             XY_middle=np.stack((X_middle,Y_middle),axis=-1)
             WH=np.stack((Widht,Height),axis=-1)
