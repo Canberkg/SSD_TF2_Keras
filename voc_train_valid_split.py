@@ -4,6 +4,8 @@ from cv2 import cv2
 from Config import cfg_300
 
 def Copy_and_Save (set_path,img_path,annotation_path,new_img_path,new_annotation_path):
+    """Copy and Save files from one directory to another
+    """
     with open(set_path) as f:
         file_names = f.readlines()
     for file in file_names:

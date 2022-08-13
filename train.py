@@ -81,7 +81,7 @@ def ssd_training_300(root_dir_train,root_dir_valid,_root_dir_train_jsons,root_di
     def train_step(Image_Batch, GT_boxes):
         with tf.GradientTape() as tape:
             ssd_pred = ssd_model(Image_Batch, training=True)
-            labeled_boxes = GroundTruth(Boxes=GT_boxes, FEATURE_MAPS=FEATURE_MAPS,IMG_WIDTH=IMG_WIDTH,
+            labeled_boxes = GroundTruth(BOXES=GT_boxes, FEATURE_MAPS=FEATURE_MAPS,IMG_WIDTH=IMG_WIDTH,
                                         IMG_HEIGHT=IMG_HEIGHT,IOU_THRESHOLD=IOU_THRESHOLD,
                                         ASPECT_RATIOS=ASPECT_RATIOS,SIZES=SIZES)
             gt_offsets, anchor_state = labeled_boxes.get_offset_boxes()
@@ -96,7 +96,7 @@ def ssd_training_300(root_dir_train,root_dir_valid,_root_dir_train_jsons,root_di
 
     def test_step(Image_Batch,GT_boxes):
         ssd_pred = ssd_model(Image_Batch, training=False)
-        labeled_boxes = GroundTruth(Boxes=GT_boxes, FEATURE_MAPS=FEATURE_MAPS, IMG_WIDTH=IMG_WIDTH,
+        labeled_boxes = GroundTruth(BOXES=GT_boxes, FEATURE_MAPS=FEATURE_MAPS, IMG_WIDTH=IMG_WIDTH,
                                     IMG_HEIGHT=IMG_HEIGHT, IOU_THRESHOLD=IOU_THRESHOLD,
                                     ASPECT_RATIOS=ASPECT_RATIOS,SIZES=SIZES)
         gt_offsets, anchor_state = labeled_boxes.get_offset_boxes()

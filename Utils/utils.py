@@ -1,11 +1,23 @@
 from cv2 import cv2
 import tensorflow as tf
-from matplotlib import pyplot
 from Config import cfg_300
 
 
 def Resize_Boxes(Image_w,Image_h,x_c,y_c,w_box,h_box):
-
+    """Resize the ground truth boxes
+    Params:
+        Image_w: Width of original image (float)
+        Image_h: height of original image (float)
+        x_c: center x-coordinates of ground truth boxes (Tensor)
+        y_c: center y-coordinates of ground truth boxes (Tensor)
+        w_box: width of ground truth boxes (Tensor)
+        h_box: height of ground truth boxes (Tensor)
+    Return:
+        x_c: Resized center x-coordinates of ground truth boxes (Tensor)
+        y_c: Resized center y-coordinates of ground truth boxes (Tensor)
+        w_box: Resized width of ground truth boxes (Tensor)
+        h_box: Resized height of ground truth boxes (Tensor)
+    """
     ratio_h=cfg_300['IMG_HEIGHT']/Image_h
     ratio_w=cfg_300['IMG_WIDTH']/Image_w
     x_c=x_c*ratio_w
@@ -16,6 +28,13 @@ def Resize_Boxes(Image_w,Image_h,x_c,y_c,w_box,h_box):
     return x_c,y_c,w_box,h_box
 
 def Visualize_BB(image,BB,scores,color):
+    """Visualize the boxes in the image
+    Params:
+        image: Image
+        BB: Boxes to display (Tensor)
+    Return:
+        image: Image with bounding boxes
+    """
     NUM_BB=BB.shape[0]
     for i in range(NUM_BB):
         score="{:.0%}".format(scores[i][0].numpy())
@@ -23,27 +42,14 @@ def Visualize_BB(image,BB,scores,color):
         cv2.putText(img=image, text=score, org=(int(BB[i,0]-(BB[i,2]/2)), int(BB[i,1]-(BB[i,3]/2)) - 5), fontFace=cv2.FONT_HERSHEY_COMPLEX, fontScale=0.3, color=(0, 255, 255), thickness=1)
     return image
 
-def visualize_feature_maps(ssd_model,img):
-    model = ssd_model
-    model.summary()
-    _,feature_maps=model(img)
-    square = 16
-    ix = 1
-    for _ in range(square):
-        for _ in range(square):
-            # specify subplot and turn of axis
-            ax = pyplot.subplot(square, square, ix)
-            ax.set_xticks([])
-            ax.set_yticks([])
-            # plot filter channel in grayscale
-            pyplot.imshow(feature_maps[0, :, :, ix - 1], cmap='jet')
-            ix += 1
-    # show the figure
-    pyplot.show()
-
-
 def calculate_iou(BB1,BB2):
-
+    """Calculate IOU between batch of bounding boxes
+    Params:
+        BB1: Batch of Bounding Box (Tensor)
+        BB2: Another Batch of  Bounding Box (Tensor)
+    Return:
+        IOU: IOU scores between batch of bounding boxes (Tensor)
+    """
     bb1_x_min,bb1_y_min,bb1_x_max,bb1_y_max=transform_cordinates(BB1)
     bb2_x_min, bb2_y_min, bb2_x_max, bb2_y_max = transform_cordinates(BB2)
     min_intersection_x=tf.math.maximum(bb1_x_min[:,None,0],bb2_x_min[:,0])
@@ -60,11 +66,18 @@ def calculate_iou(BB1,BB2):
     Union_Area=BB1_Area[:,None,0]+BB2_Area[:,0]-Intersect_Area
     IOU=Intersect_Area/Union_Area
 
-
     return IOU
 
 def transform_cordinates(BB):
-    #from x_c,y_c,w,h to x_min,y_min,x_max,y_max
+    """Transform box coordinates from [center_x,center_y,w,h] to [x_min,y_min,x_max,y_max]
+    Params:
+        BB1: Batch of Bounding Boxes (Tensor)
+    Return:
+        x_min: minimum x coordinate of batch of bounding boxes (Tensor)
+        y_min: minimum y coordinate of batch of bounding boxes (Tensor)
+        x_max: maximum x coordinate of batch of bounding boxes (Tensor)
+        y_max: maximum y coordinate of batch of bounding boxes (Tensor)
+    """
     x_c,y_c,w,h=BB[:,0],BB[:,1],BB[:,2],BB[:,3]
 
     x_min = abs(x_c - (0.5 * w))
@@ -80,6 +93,15 @@ def transform_cordinates(BB):
     return x_min,y_min,x_max,y_max
 
 def nms(BBoxes,BBox_scores):
+    """Perform Non-max Suppression
+    Params:
+        BBoxes: Batch of Bounding Boxes (Tensor)
+        BBox_scores: Batch of Bounding Box scores (Tensor)
+    Return:
+        boxes: Remaining bounding boxes (Tensor)
+        scores: Scores of remaining bounding boxes (Tensor)
+        classes Classes of remaining bounding boxes (Tensor)
+    """
     chosen_boxes=[]
     chosen_scores = []
     chosen_classes = []

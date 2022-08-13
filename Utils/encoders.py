@@ -1,10 +1,17 @@
-import os
+
 import tensorflow as tf
 
 from Primary.Encoder.VGG16 import VGG16
 
 def load_mdl(inputs,num_class,model_type):
-
+    """Load a pre-trained backbone model
+    Params:
+        inputs: Input tensor (Tensor)
+        num_class: Number of Classes (Int)
+        model_type: Name of the model (String)
+    Return:
+        model
+    """
     if model_type == 'resnet50':
 
         Resnet = tf.keras.applications.ResNet50(

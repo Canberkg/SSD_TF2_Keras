@@ -61,7 +61,7 @@ if __name__=="__main__":
     GT_List = []
 
 
-    gt=GroundTruth(Boxes=gt_boxes, FEATURE_MAPS=FEATURE_MAPS,IMG_WIDTH=IMG_WIDTH,
+    gt=GroundTruth(BOXES=gt_boxes, FEATURE_MAPS=FEATURE_MAPS,IMG_WIDTH=IMG_WIDTH,
                                         IMG_HEIGHT=IMG_HEIGHT,IOU_THRESHOLD=IOU_THRESHOLD,
                                         ASPECT_RATIOS=ASPECT_RATIOS,SIZES=SIZES)
     offset,anchor_state=gt.get_positive_negative_boxes(GT_boxes=gt.B_Boxes,Pred_Boxes=gt.predicted_boxes)

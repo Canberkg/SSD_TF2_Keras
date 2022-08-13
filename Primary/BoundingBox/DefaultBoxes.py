@@ -3,6 +3,14 @@ import numpy as np
 import math
 
 class Feature_Map(object):
+    """Feature Map Class
+
+    Attributes :
+            FEATURE_MAPS  : List of feature map shapes  (List)
+            IMG_WIDTH     : Width of input accepted by the network (Int)
+            IMG_HEIGHT    : Height of input accepted by the network (Int)
+            SIZES         : List of scales for anchor boxes (List)
+    """
     def __init__(self,Feature_Maps,IMG_WIDTH,IMG_HEIGHT,SIZES):
         self.NUM_Feature_Maps=len(Feature_Maps)
         self.SIZES=SIZES
@@ -11,24 +19,55 @@ class Feature_Map(object):
         self.IMG_HEIGHT = IMG_HEIGHT
 
     def get_length(self):
+        """Find the total number of feature maps used for prediction
+        Return:
+            Number of Feature Maps (int)
+        """
         return self.NUM_Feature_Maps
     def get_width(self,idx):
+        """Find the width of feature map
+        Params:
+            idx: Index of the specific feature map (int)
+        Return:
+            Width of the Feature Map (int)
+        """
         return self.Feature_Maps[idx][1]
     def get_height(self,idx):
+        """Find the height of feature map
+        Params:
+            idx: Index of the specific feature map (int)
+        Return:
+            Height of the Feature Map (int)
+        """
         return self.Feature_Maps[idx][0]
-    def get_downsample_ratio(self,idx):
-        width_ratio=self.IMG_WIDTH/self.get_width(idx)
-        height_ratio=self.IMG_HEIGHT/self.get_height(idx)
-        if width_ratio !=height_ratio:
-            raise ValueError("Downsampling ratio of width and height should be equal!")
-        else:
-            return math.ceil(width_ratio)
+
     def get_scale_min(self,idx):
+        """Find the min scale of anchor boxes for specific feature map
+        Params:
+            idx: Index of the specific feature map (int)
+        Return:
+            Min scale of anchor boxes on that feature map (int)
+        """
         return self.SIZES[idx][0]
     def get_scale_max(self,idx):
+        """Find the max scale of anchor boxes for specific feature map
+        Params:
+            idx: Index of the specific feature map (int)
+        Return:
+            Max scale of anchor boxes on that feature map (int)
+        """
         return self.SIZES[idx][1]
 
 class DefaultBoxes(object):
+    """Default Boxes (Anchor Boxes) Class
+
+    Attributes :
+            FEATURE_MAPS  : List of feature map shapes  (List)
+            IMG_WIDTH     : Width of input accepted by the network (Int)
+            IMG_HEIGHT    : Height of input accepted by the network (Int)
+            ASPECT_RATIOS : List of aspect ratios for anchor boxes (List)
+            SIZES         : List of scales for anchor boxes (List)
+    """
     def __init__(self,Feature_Maps,IMG_WIDTH,IMG_HEIGHT,ASPECT_RATIOS,SIZES):
 
         self.image_width=IMG_WIDTH
@@ -40,7 +79,15 @@ class DefaultBoxes(object):
         self.Offset=0.5
 
     def create_default_boxes_for_feature_map(self,idx):
-
+        """Generate anchor boxes for a specific feature map
+        Params:
+            idx: Index of the specific feature map (int)
+        Return:
+            x_middle: Center x-coordinate of the anchor boxes (Array)
+            y_middle: Center y-coordinate of the anchor boxes (Array)
+            Db_width: Width of the anchor boxes (Array)
+            Db_height: Height of the anchor boxes (Array)
+        """
         Fm_width=self.feature_maps.get_width(idx)
         Fm_height=self.feature_maps.get_height(idx)
         s_idx=self.feature_maps.get_scale_min(idx=idx)
@@ -86,6 +133,11 @@ class DefaultBoxes(object):
         return x_middle,y_middle,Db_width,Db_height
 
     def generate_default_boxes(self):
+        """Combine all the generated anchor boxes for each feature map
+        Params:
+        Return:
+            DefaultBoxes_list: Array of total generated anchor boxes (Array)
+        """
         DefaultBoxes_list=[]
         for i in range(self.Num_Feature_Maps):
 

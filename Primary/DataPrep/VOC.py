@@ -3,15 +3,38 @@ from Utils.utils import Resize_Boxes
 from Primary.DataPrep.class_dict import class_dict
 
 class VOC(object):
+    """VOC Dataset Class
+
+    Attributes :
+        json_data: Annotations in JSON format for VOC2012 dataset (json)
+        IMG_WIDTH     : Width of input accepted by the network (Int)
+        IMG_HEIGHT    : Height of input accepted by the network (Int)
+
+    """
     def __init__(self,json_data,IMG_WIDTH,IMG_HEIGHT):
         self.json_data=json_data['annotation']
         self.IMG_WIDTH=IMG_WIDTH
         self.IMG_HEIGHT=IMG_HEIGHT
     def width(self):
+        """Find the original width of image
+        Params:
+        Return:
+            Width of the Original Image (int)
+        """
         return int(self.json_data['size']['width'])
     def height(self):
+        """Find the original height of image
+        Params:
+        Return:
+            Height of the Original Image (int)
+        """
         return int(self.json_data['size']['height'])
     def obj_to_gt(self):
+        """Generate ground truth boxes from annotations
+        Params:
+        Return:
+            Tensor of Ground Truth Boxes (Tensor)
+        """
         obj=self.json_data['object']
         x_center=[]
         y_center=[]

@@ -1,8 +1,4 @@
 import tensorflow as tf
-from keras import backend as K
-import numpy as np
-
-
 
 def _smooth_l1(y_true, y_pred, anchor_state):
 
