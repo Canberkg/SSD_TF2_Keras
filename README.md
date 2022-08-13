@@ -39,6 +39,7 @@ For testing, the name of the model used for testing and the path to the image mu
 
 * Since I only have google colab pro to train and test my network, it takes a lot of time for me to train and see the results of the training. I will share the weights of the model when I succeed in obtaining a model that performs well in both training and validation data. If you have any feedback please let me know, I would love to discuss about it and improve the repository with your feedback.
 
+
 ## Reference
 [1]LIU, Wei, et al. Ssd: Single shot multibox detector. In: European conference on computer vision. Springer, Cham, 2016. p. 21-37.
 
