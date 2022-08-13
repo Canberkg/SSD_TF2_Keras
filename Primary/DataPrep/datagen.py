@@ -1,13 +1,13 @@
 import os
 import json
+import random
 import tensorflow as tf
 import numpy as np
 import cv2
-
 from Primary.DataPrep.VOC import VOC
 
 class data_gen(tf.keras.utils.Sequence):
-    def __init__(self, Img_Path, Label_Path, Img_Width, Img_Height, Batch_Size, Num_Classes, Shuffle=False):
+    def __init__(self, Img_Path, Label_Path, Img_Width, Img_Height, Batch_Size, Num_Classes, Shuffle=False,Augmentation=None):
         self.Img_Path = Img_Path
         self.Label_Path = Label_Path
         self.Img_list = os.listdir(self.Img_Path)
@@ -18,6 +18,7 @@ class data_gen(tf.keras.utils.Sequence):
         self.Num_Classes = Num_Classes
         self.indices = range(0, len(self.Img_list) - (len(self.Img_list) % self.Batch_Size))
         self.index = np.arange(0, len(self.Img_list) - (len(self.Img_list) % self.Batch_Size))
+        self.Augmentation=Augmentation
         self.shuffle = Shuffle
 
     def num_images(self):
@@ -38,6 +39,20 @@ class data_gen(tf.keras.utils.Sequence):
 
         return x, y
 
+    def augmentation_flip(self,img,labels):
+        augmentation_prob=random.random()
+        if augmentation_prob > 0.2 and augmentation_prob <= 0.6:
+            ##Vertical Flip
+            print('vertical')
+            img = img[::-1,:,:]
+            labels = tf.stack([labels[:,0],1-labels[:,1],labels[:,2],labels[:,3],labels[:,4]],axis=1)
+        elif augmentation_prob > 0.6 and augmentation_prob <= 1:
+            ##Horizontal Flip
+            print('horizontal')
+            img = img[:, ::-1, :]
+            labels = tf.stack([1-labels[:, 0], labels[:, 1], labels[:, 2], labels[:, 3], labels[:, 4]], axis=1)
+        return img,labels
+
     def __getdata__(self, batch):
 
         Images = []
@@ -53,14 +68,18 @@ class data_gen(tf.keras.utils.Sequence):
                 Img = cv2.imread(filename=os.path.join(self.Img_Path, batch_of_images[k]))
                 Img = cv2.resize(Img, (self.Img_Width, self.Img_Height), interpolation=cv2.INTER_NEAREST)
                 Img_arr = np.asarray(Img, dtype=np.float32)
-                Img_normalized = tf.keras.applications.vgg16.preprocess_input(Img_arr)
-                Images.append(Img_normalized)
+                img_normalized = tf.keras.applications.vgg16.preprocess_input(Img_arr)
 
                 label_ind = self.Label_list.index(label)
                 f = open(os.path.join(self.Label_Path, self.Label_list[label_ind]))
                 data = json.load(f)
                 voc = VOC(json_data=data,IMG_WIDTH=self.Img_Width,IMG_HEIGHT=self.Img_Height)
                 gt_boxes = voc.obj_to_gt()
+
+                if self.Augmentation == "FLIP":
+                    img_normalized,gt_boxes=self.augmentation_flip(img=img_normalized,labels=gt_boxes)
+
+                Images.append(img_normalized)
                 Labels[k] = gt_boxes
 
             else:

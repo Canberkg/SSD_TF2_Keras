@@ -1,20 +1,20 @@
 from Primary.DataPrep.class_dict import class_dict
 cfg_300 = {
     ## Training Settings
-    'BATCH_SIZE' :  16,
+    'BATCH_SIZE' :  1,
     'EPOCH'      :  50,
     'IMG_WIDTH'  :  300,
     'IMG_HEIGHT' :  300,
-    'OPTIMIZER'  :  'ADAM', # Can be set as ADAM or SGD
-    'LR'         :  0.001,  # if the LR_SCHEDULER set as true, LR will be init point for the scheduler otherwise will be set as a constant learning rate
-    'LR_SCHEDULER' : False, #If it is specified as False, dont have to change the Decay steps or rate!
+    'OPTIMIZER'  :  'ADAM',
+    'LR'         :  0.001,
+    'LR_SCHEDULER' : False,
         'DECAY_STEPS' : 1000,
         'DECAY_RATE'  : 0.96,
     'NUM_CLASS'  : len(class_dict.keys()),
 
     ## Test Settings
-    "TEST_MODEL_NAME" : "The name of the model to be used for testing",
-    "TEST_IMAGE"      : "Path of the image to be used for testing",
+    "TEST_MODEL_NAME" : "Model_Test_1",
+    "TEST_IMAGE"      : "D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Img\\val\\2008_001574.jpg",
 
     ## Anchor Box Settings
     'ASPECT_RATIOS' : [[1.0, 2.0, 0.5],
@@ -28,7 +28,7 @@ cfg_300 = {
     'FEATURE_MAPS'  : [(38,38),(19,19),(10,10),(5,5),(3,3),(1,1)],
 
     ## Model Save and Checkpoint Settings
-    'SAVE_DIR'   : "Saved_Model",
+    'SAVE_DIR'   : "D:\\PersonalResearch\\Projects\\Models\\SSD",
     'MODEL_NAME' : 'Name of the Model',
     'CKPT_DIR'   : 'Name of the Checkpoint Directory',
 

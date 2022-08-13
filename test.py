@@ -24,7 +24,7 @@ if __name__ == "__main__":
     TEST_IMG_PATH   = cfg_300["TEST_IMAGE"]
 
     ssd_model = SSD300(ASPECT_RATIOS=ASPECT_RATIOS,BATCH_SIZE=BATCH_SIZE,NUM_CLASS=NUM_CLASSES)
-    ssd_model.build(input_shape=(1,300,300,3))
+    ssd_model.build(input_shape=(BATCH_SIZE,300,300,3))
     ssd_model.load_weights(os.path.join(SAVE_DIR,"{}.h5".format(TEST_MODEL_NAME)))
     ssd_model.trainable=False
     ssd_model.summary()
