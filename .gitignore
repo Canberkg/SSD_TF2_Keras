@@ -2,6 +2,7 @@ pycache__
 checkpoints
 weights
 Dataset
+*.txt
 *.h5
 *.jpg
 *.json
