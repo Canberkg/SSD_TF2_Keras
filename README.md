@@ -31,11 +31,14 @@ For testing, the name of the model used for testing and the path to the image mu
 ## To-Do List
 
 - [ ] Command-Line Interface
-- [ ] Data Augmentation
+- [ ] Other Data Augmentation Techniques
+- [ ] New Backbones (ResNet-50,etc.)
+- [ ] Implementing SSD-512 
 
 ##  Notes
 
-* Since I only have google colab pro to train and test my network, it takes a lot of time for me to train and see the results of the training. I have observed that the implementation has an overfitting issue that can be overcome by integrating data augmentation into the data generation process. However, it may take time for me to fix the problem due to the situation I mentioned. I will also share the weights of the model when I succeed in obtaining a model that performs well in both training and validation data. If you have any feedback please let me know, I would love to discuss about it and improve the repository with your feedback.
+* Since I only have google colab pro to train and test my network, it takes a lot of time for me to train and see the results of the training. I will share the weights of the model when I succeed in obtaining a model that performs well in both training and validation data. If you have any feedback please let me know, I would love to discuss about it and improve the repository with your feedback.
+
 
 ## Reference
 [1]LIU, Wei, et al. Ssd: Single shot multibox detector. In: European conference on computer vision. Springer, Cham, 2016. p. 21-37.

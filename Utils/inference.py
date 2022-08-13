@@ -5,6 +5,17 @@ from Primary.BoundingBox.DefaultBoxes import DefaultBoxes
 tf.random.set_seed(1234)
 
 class inference(object):
+    """Inference Class
+
+    Attributes :
+            model         : Model
+            NUM_CLASSES   : Number of Classes  (Int)
+            IMG_HEIGHT    : Height of input accepted by the network (Int)
+            IMG_WIDTH     : Width of input accepted by the network (Int)
+            FEATURE_MAPS  : List of feature map shapes  (List)
+            ASPECT_RATIOS : List of aspect ratios for anchor boxes (List)
+            SIZES         : List of scales for anchor boxes (List)
+    """
     def __init__(self,model,NUM_CLASSES,IMG_HEIGHT,IMG_WIDTH,FEATURE_MAPS,ASPECT_RATIOS,SIZES):
         self.model=model
         self.IMG_HEIGHT=IMG_HEIGHT
@@ -15,10 +26,23 @@ class inference(object):
         self.SIZES=SIZES
 
     def ssd_prediction(self,image):
+        """Prediction by using specified model
+        Params:
+            image: Image array (Array)
+        Return:
+            ssd_pred: predicted offset bounding boxes (Tensor)
+        """
         ssd_pred=self.model(image)
         return ssd_pred
 
     def filter_out_background_boxes(self,pred_box):
+        """Filter out background boxes
+        Params:
+            pred_box: predicted bounding boxes (Tensor)
+        Return:
+            object_exist: Whether object exist or not (boolean)
+            non_background_boxes: If object exist, bounding boxes for wanted objects (Tensor)
+        """
         pred_box_classes=pred_box[...,:self.NUM_CLASSES]
         sftmx=tf.nn.softmax(pred_box_classes)
         true_classes=tf.argmax(sftmx,axis=-1)
@@ -30,7 +54,13 @@ class inference(object):
         else:
             return object_exist,pred_box
 
-    def decode_offsets_to_true_boxes(self,feature_maps,offset_pred):
+    def decode_offsets_to_true_boxes(self,offset_pred):
+        """Decode founded offset bounding boxes
+        Params:
+            offset_pred: predicted offset bounding boxes (Tensor)
+        Return:
+            true_predictions: Decoded bounding boxes (Tensor)
+        """
         pred_classes = tf.reshape(tensor=offset_pred[..., :self.NUM_CLASSES], shape=(-1, self.NUM_CLASSES))
         pred_boxes= tf.reshape(tensor=offset_pred[..., self.NUM_CLASSES:], shape=(-1, 4))
         default_boxes=DefaultBoxes(Feature_Maps=self.FEATURE_MAPS,IMG_WIDTH=self.IMG_WIDTH,IMG_HEIGHT=self.IMG_HEIGHT,ASPECT_RATIOS=self.ASPECT_RATIOS,SIZES=self.SIZES).generate_default_boxes()
@@ -53,6 +83,15 @@ class inference(object):
 
 
     def detected_boxes(self,image):
+        """Detect existing objects
+        Params:
+            image: Image (Tensor)
+        Return:
+            object_exist: Whether object exist or not (boolean)
+            boxes: Remaining boxes after the NMS (Tensor)
+            scores: Scores of the remaining boxes after the NMS (Tensor)
+            classes: Classes of the remaining boxes after the NMS (Tensor)
+        """
         pred_boxes=self.ssd_prediction(image=image)
         true_boxes=self.decode_offsets_to_true_boxes(feature_maps= self.FEATURE_MAPS,offset_pred=pred_boxes)
         object_exist,non_background_boxes=self.filter_out_background_boxes(pred_box=true_boxes)
