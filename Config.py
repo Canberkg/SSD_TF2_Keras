@@ -13,8 +13,8 @@ cfg_300 = {
     'NUM_CLASS'  : len(class_dict.keys()),
 
     ## Test Settings
-    "TEST_MODEL_NAME" : "Model_Test_1",
-    "TEST_IMAGE"      : "D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Img\\val\\2008_001574.jpg",
+    "TEST_MODEL_NAME" : "Model_Test_3",
+    "TEST_IMAGE"      : "D:\\PersonalResearch\\Projects\\Datasets\\VOC2012\\Img\\val\\2008_000059.jpg",
 
     ## Anchor Box Settings
     'ASPECT_RATIOS' : [[1.0, 2.0, 0.5],

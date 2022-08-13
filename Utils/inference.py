@@ -93,7 +93,7 @@ class inference(object):
             classes: Classes of the remaining boxes after the NMS (Tensor)
         """
         pred_boxes=self.ssd_prediction(image=image)
-        true_boxes=self.decode_offsets_to_true_boxes(feature_maps= self.FEATURE_MAPS,offset_pred=pred_boxes)
+        true_boxes=self.decode_offsets_to_true_boxes(offset_pred=pred_boxes)
         object_exist,non_background_boxes=self.filter_out_background_boxes(pred_box=true_boxes)
         if object_exist==False:
             class_scores=non_background_boxes[...,:self.NUM_CLASSES]
